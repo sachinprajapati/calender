@@ -1,0 +1,149 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body>
+<center>
+		<table>
+<tbody><tr>
+<td>
+<br>
+<br>
+<h2>COMP2152
+<br>Assignment 1
+</h2></td></tr>
+</tbody></table>
+
+
+<table border="">
+<tbody><tr><th align="left">Due:</th><td>
+	April 7, 2019, 11:59 PM 
+</td></tr>
+<tr><th align="left">Late penalty:</th><td> 
+	10% per day of lateness, to a maximum of 3 days. Assignments not accepted after that time.
+</td></tr>
+<tr><th align="left">Hand in:</th><td>
+  	Electronic submit through blackboard.
+PLEASE SUBMIT Calendar.py and use_calendar.py.
+
+
+</td></tr>
+<tr><th align="left">Marking:</th><td> 
+<xmp>
+This assignment is common for all sections (Ben's and Pawluk's).
+All code must be your own!!! 
+
+No copy and modify code allowed from other sources.
+
+
+Your code will be automarked for functionality in the same manner as your Lab Test- by using unit testing test cases.
+
+We will also use software to detect plagiarism.
+</xmp>
+
+</td></tr>
+<tr><th align="left">Groups:</th><td> Work alone </td></tr>
+</tbody></table>
+</center>
+		<ul>
+		<li> Download Calendar.py and use_calendar.py.
+		</li><li> Complete all functions so that they behave as described. 
+		</li><li> Use the a2_type_check.py to verify the return type and number of parameters of your functions.
+		</li><li> Make sure that the DocTest code successfully runs. You might want to add even more test cases.
+		</li><li> You do not need to define any new functions. 
+		</li><li> Do not use any additional packages.
+		</li></ul>
+	<h3>Questions and Answers</h3>
+
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+		How do I open a file for reading if it exists, otherwise create it.
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+	Take a look at os.path.exists. You will need to import os at the top of Calendar.py.
+	Example:
+<xmp>
+import os
+if os.path.exists('zz'):
+	print("File zz exists")
+else:
+	print("File zz does not exists")
+</xmp>
+        </dd>
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+	Can I make calendar = {} global?
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+	No, there is no global code!! The only 'global' thing is the new
+	import os at the top of the Calendar.py file.
+        </dd>
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+	Can I doctest load_calendar and save_calendar?
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+	Yes, how about making a calendar and then saving it, 
+	then loading it back and finally comparing what you saved and what you
+	loaded. This requires that both functions work. There are other
+	alternatives. This does not verify the file format, but does verify
+	that save and load work together properly.
+        </dd>
+
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+		Can I use functions like is_natural_number inside other functions?
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+		Yes, definitely, better code repeats less. If you define a useful function, you should use it everywhere it makes sense to use it.
+        </dd>
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+	For the function is_command(command), do we need to account that the
+commands could be upper case (e.g. "Add", "Delete") or can we just assume
+that all commands will be lower case?
+
+
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+	We will not mark it wrong if you accept or reject mixed case commands.
+	You must accept lowercase commands.
+        </dd>
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+		Are the test cases in the program the only ones that will be accounted
+		for, or should be try out more test cases to make sure it works completely?
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+	A tester will be released a few weeks before the deadline. The tester will outline all the final test cases that will determine your mark.
+        </dd>
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+	Are we allowed to use the isdigit method in the is_natural_number function?
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+	Please do not use isdigit.
+        </dd>
+
+<dt><font color="red"><b>Question:</b></font></dt>
+        <dd>
+	For user_interface(), should we make test cases for it or should we assume
+	that the user will always enter parameters correctly?
+        </dd>
+<dt><font color="green"><b>Answer:</b></font></dt>
+        <dd>
+	The user may enter nonsense. You do not have to write test cases for this function.
+
+        </dd>
+
+	
+
+</body></html>
