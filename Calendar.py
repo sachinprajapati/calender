@@ -167,7 +167,7 @@ def command_show(calendar):
     """
     b = []
     for i,j in sorted(calendar.items(), reverse=True):
-        b.append('{} :'.format(i))
+        b.append('\n{} :'.format(i))
         for v in j:
             #b.append('\n'+' '*4+'start : {}\n'+' '*4+'end: {}\n'+' '*4+'title: {}\n'.format(v['start'], v['end'], v['title']))
             b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}\n').format(v['start'], v['end'], v['title']))
@@ -291,8 +291,9 @@ def save_calendar(calendar):
     """
     # YOUR CODE GOES HERE
     f = open("calendar.txt", 'w')
-    for i, j in calendar.items():
-        st = ['{}-{} {}'.format(v['start'], v['end'], v['title']) for v in j]
+    for i, j in sorted(calendar.items(), reverse=True):
+        st = ['{}-{} {}s'.format(v['start'], v['end'], v['title']) for v in j]
+        st.append('\n')
         f.write(i+':'+'\t'.join(st))
     f.close()
     return True
@@ -351,7 +352,6 @@ def is_command(command):
     # YOUR CODE GOES HERE
     return command in ["add", "delete", "quit", "help", "show"]
 
-import datetime
 
 def is_calendar_date(date):
     '''
@@ -396,13 +396,11 @@ def is_calendar_date(date):
     # 0123456789
 
     # YOUR CODE GOES HERE
-    try:
-        datetime.datetime.today().strptime(date, '%Y-%m-%d')
-    except:
-        return False
-    else:
+    dt = date.split('-')
+    if len(dt[0]) == 4 and len(dt[1]) == 2 and len(dt[2]) == 2 and is_natural_number(dt[0]) and is_natural_number(dt[1] and is_natural_number(dt[2])):
         return True
-
+    else:
+        return False
 
 def is_natural_number(str):
     '''
@@ -434,12 +432,11 @@ def is_natural_number(str):
     # Check that all characters are in ["0123456789"]
 
     # YOUR CODE GOES HERE
-    try:
-        a = int(str)
-    except:
-        return False
+    b = "0123456789"
+    if len(str) > 0 and all(i in b for i in list(str)):
+        return True
     else:
-        return a > 0
+        return False
 
 
 def parse_command(line):
@@ -513,6 +510,8 @@ def parse_command(line):
                     return st
                 else:
                     return []
+            elif not is_calendar_date(st[1]):
+                return ['error', 'not a valid calendar date']
             else:
                 return ['error', 'add DATE START_TIME END_TIME DETAILS']
         elif st[0] == 'delete':
