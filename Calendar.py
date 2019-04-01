@@ -129,7 +129,7 @@ def command_add(date, start_time, end_time, title, calendar):
 
     if not calendar.get(date):
         calendar[date] = []
-    if not is_calendar_date(date) and not is_natural_number(start_time) and not is_natural_number(end_time):
+    if not is_calendar_date(date) and start_time >= end_time and start_time in range(24) and end_time in range(24):
         return False
     calendar[date].append({"start": start_time, "end": end_time, "title": title})
     if save_calendar(calendar):
@@ -396,9 +396,15 @@ def is_calendar_date(date):
     # 0123456789
 
     # YOUR CODE GOES HERE
-    dt = date.split('-')
-    if len(dt[0]) == 4 and len(dt[1]) == 2 and len(dt[2]) == 2 and is_natural_number(dt[0]) and is_natural_number(dt[1] and is_natural_number(dt[2])):
-        return True
+    #dt = date.split("-")
+    # if len(dt[0]) == 4 and len(dt[1]) == 2 and len(dt[2]) == 2 and is_natural_number(dt[0]) and is_natural_number(dt[1] and is_natural_number(dt[2])):
+    #     return True
+    if len(date) == 10:
+        dt = date.split('-')
+        if len(dt[0]) == 4 and len(dt[1]) == 2 and len(dt[2]) == 2 and dt[1] in range(1,13) and dt[2] in range(1,13):
+            return True
+        else:
+            return False
     else:
         return False
 
