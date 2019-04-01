@@ -108,11 +108,15 @@ def user_interface():
 
     while True:
         st = calendar.parse_command(input("command: "))
-        if st[0] == 'add':
+        if st[0] == 'help':
+            print(calendar.command_help())
+        elif st[0] == 'add':
             a = calendar.command_add(*st[1:], data)
             print('added')
         elif st[0] == 'delete':
             a = calendar.command_delete()
+        elif st[0] == 'show':
+            print(calendar.command_show(data))
 
 if __name__ == "__main__":
     user_interface()
