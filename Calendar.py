@@ -129,7 +129,9 @@ def command_add(date, start_time, end_time, title, calendar):
 
     if not calendar.get(date):
         calendar[date] = []
-    if not is_calendar_date(date) and start_time >= end_time and start_time in range(24) and end_time in range(24):
+    if end_time < start_time:
+        return False
+    if not is_calendar_date(date) and start_time in range(24) and end_time in range(24):
         return False
     calendar[date].append({"start": start_time, "end": end_time, "title": title})
     if save_calendar(calendar):
@@ -167,10 +169,10 @@ def command_show(calendar):
     """
     b = []
     for i,j in sorted(calendar.items(), reverse=True):
-        b.append('\n{} :'.format(i))
+        b.append('\n{} : '.format(i))
         for v in j:
             #b.append('\n'+' '*4+'start : {}\n'+' '*4+'end: {}\n'+' '*4+'title: {}\n'.format(v['start'], v['end'], v['title']))
-            b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}\n').format(v['start'], v['end'], v['title']))
+            b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}').format(v['start'], v['end'], v['title']))
     return ''.join(b)
 
 def command_delete(date, start_time, calendar):
@@ -227,8 +229,8 @@ def command_delete(date, start_time, calendar):
 
     # YOUR CODE GOES HERE
     data = load_calendar()
-    if is_calendar_date(date) and is_natural_number(start_time):
-        return 
+    if not is_calendar_date(date) and not is_natural_number(start_time):
+        return False
     return 'str'
 
 
@@ -401,8 +403,11 @@ def is_calendar_date(date):
     #     return True
     if len(date) == 10:
         dt = date.split('-')
-        if len(dt[0]) == 4 and len(dt[1]) == 2 and len(dt[2]) == 2 and dt[1] in range(1,13) and dt[2] in range(1,13):
-            return True
+        if len(dt[0]) == 4 and len(dt[1]) == 2 and len(dt[2]) == 2 and is_natural_number(dt[0]) and is_natural_number(dt[1]) and is_natural_number(dt[2]):
+            if int(dt[1]) in range(1,13) and int(dt[2]) in range(1,32):
+                return True
+            else:
+                return False
         else:
             return False
     else:
@@ -503,37 +508,50 @@ def parse_command(line):
     # HINT: You can first split, then join back the parts of
     # the final argument.
     # YOUR CODE GOES HERE
+    calendar = load_calendar()
     st = line.split()
     if len(st) == 0 or not is_command(st[0]):
         return ['help']
     else:
         if st[0] == 'add':
             if len(st) > 4:
-                if is_calendar_date(st[1]) and is_natural_number(st[2]) and is_natural_number(st[3]):
+                if not is_calendar_date(st[1]):
+                    return ['error', 'not a valid calendar date']
+                elif is_natural_number(st[2]) and is_natural_number(st[3]):
                     st[2] = int(st[2])
                     st[3] = int(st[3])
                     st = st[:4]+[' '.join(st[4:])]
                     return st
                 else:
-                    return []
-            elif not is_calendar_date(st[1]):
-                return ['error', 'not a valid calendar date']
+                    return ['error', 'not a valid event start time']
             else:
                 return ['error', 'add DATE START_TIME END_TIME DETAILS']
         elif st[0] == 'delete':
             if len(st) > 1:
-                if is_calendar_date(st[1]) and is_natural_number(st[2]):
-                    st[2] = int(st[2])
-                    return st
+                if len(st) > 2:
+                    if not is_calendar_date(st[1]):
+                        return ['error', 'not a valid calendar date']
+                    try:
+                        if not is_natural_number(st[2]):
+                            raise
+                        return st
+                    except:
+                        return ['error', 'not a valid event start time']
                 else:
-                    return []
+                    return ['error', 'delete DATE START_TIME']
             else:
                 return ['error', 'delete DATE START_TIME']
         elif st[0] == 'quit':
             save_calendar(calendar)
             return ['quit']
         elif st[0] == 'show':
-            return st
+            if len(st) > 1:
+                return ['error', 'show']
+            else:
+                return ['show']
+
+        elif st[0] == 'help':
+            return ['help']
 
 
 
