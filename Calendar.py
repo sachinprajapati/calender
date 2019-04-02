@@ -173,7 +173,8 @@ def command_show(calendar):
         for v in j:
             #b.append('\n'+' '*4+'start : {}\n'+' '*4+'end: {}\n'+' '*4+'title: {}\n'.format(v['start'], v['end'], v['title']))
             b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}').format(v['start'], v['end'], v['title']))
-    return ''.join(b)
+        #b.append('\n')
+    return '\n'.join(b)
 
 def command_delete(date, start_time, calendar):
     """
@@ -231,7 +232,15 @@ def command_delete(date, start_time, calendar):
     data = load_calendar()
     if not is_calendar_date(date) and not is_natural_number(start_time):
         return False
-    return 'str'
+    if data.get(date):
+        for i in data.values():
+            if date in [j['start'] for j in i]:
+                return True
+        else:
+            return "There is no event with start time of {} on date {} in the calendar".format(start_time, date)
+    else:
+        return date+" is not a date in the calendar"
+
 
 
 # -----------------------------------------------------------------------------
@@ -320,11 +329,8 @@ def load_calendar():
         f.close()
         return {}
     else:
+        return {}
         f.close()
-        return {"2018-03-13": [{"start": 13, "end": 13, "title": "Have fun"}], "2018-03-11": \
-    [{"start": 14, "end": 16, "title": "CSCA08 test 2"}], "2018-02-28": [{"start": 11, "end": 12, \
-    "title": "Python class"}]}
-    f.close()
 
 # -----------------------------------------------------------------------------
 # Functions dealing with parsing commands
