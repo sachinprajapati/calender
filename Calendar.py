@@ -170,11 +170,10 @@ def command_show(calendar):
     b = []
     for i,j in sorted(calendar.items(), reverse=True):
         b.append('\n{} : '.format(i))
-        for v in j:
+        for v in sorted(j, key=lambda x:x['start']):
             #b.append('\n'+' '*4+'start : {}\n'+' '*4+'end: {}\n'+' '*4+'title: {}\n'.format(v['start'], v['end'], v['title']))
-            b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}').format(v['start'], v['end'], v['title']))
-        #b.append('\n')
-    return '\n'.join(b)
+            b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}\n').format(v['start'], v['end'], v['title']))
+    return ''.join(b)
 
 def command_delete(date, start_time, calendar):
     """
@@ -229,13 +228,13 @@ def command_delete(date, start_time, calendar):
     """
 
     # YOUR CODE GOES HERE
-    data = load_calendar()
-    if not is_calendar_date(date) and not is_natural_number(start_time):
-        return False
+    data = {}
+    # if not is_calendar_date(date) and not is_natural_number(start_time):
+    #     return False
     if data.get(date):
-        for i in data.values():
-            if date in [j['start'] for j in i]:
-                return True
+        for i in data[date]:
+            if i['start'] == start_time:
+                return data[date].remove(i)
         else:
             return "There is no event with start time of {} on date {} in the calendar".format(start_time, date)
     else:
@@ -303,9 +302,10 @@ def save_calendar(calendar):
     # YOUR CODE GOES HERE
     f = open("calendar.txt", 'w')
     for i, j in sorted(calendar.items(), reverse=True):
-        st = ['{}-{} {}s'.format(v['start'], v['end'], v['title']) for v in j]
-        st.append('\n')
-        f.write(i+':'+'\t'.join(st))
+        # st = ['{}-{} {}s'.format(v['start'], v['end'], v['title']) for v in j]
+        # st.append('\n')
+        #f.write(i+':'+'\t'.join(st))
+        f.writelines(command_show(calendar))
     f.close()
     return True
 
@@ -329,8 +329,8 @@ def load_calendar():
         f.close()
         return {}
     else:
-        return {}
         f.close()
+        return {}
 
 # -----------------------------------------------------------------------------
 # Functions dealing with parsing commands

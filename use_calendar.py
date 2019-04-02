@@ -112,10 +112,13 @@ def user_interface():
             print(calendar.command_help())
         elif st[0] == 'add':
             a = calendar.command_add(*st[1:], data)
-            print('added')
+            if a:
+                print('added')
         elif st[0] == 'delete':
             a = calendar.command_delete()
         elif st[0] == 'show':
+            print(calendar.command_show(data))
+        elif st[0] == 'quit':
             print(calendar.command_show(data))
 
 if __name__ == "__main__":
