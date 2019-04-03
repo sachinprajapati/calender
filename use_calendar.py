@@ -104,7 +104,7 @@ def user_interface():
     :return: None
     '''
     # Your code goes here
-    data = calendar.load_calendar()
+    data = {}
 
     while True:
         st = calendar.parse_command(input("command: "))
@@ -119,7 +119,8 @@ def user_interface():
         elif st[0] == 'show':
             print(calendar.command_show(data))
         elif st[0] == 'quit':
-            print(calendar.command_show(data))
+            print('calendar saved')
+            break
 
 if __name__ == "__main__":
     user_interface()

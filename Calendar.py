@@ -131,9 +131,11 @@ def command_add(date, start_time, end_time, title, calendar):
         calendar[date] = []
     if end_time < start_time:
         return False
-    if not is_calendar_date(date) and start_time in range(24) and end_time in range(24):
+    if not is_calendar_date(date) and not start_time in range(24) and not end_time in range(24):
         return False
     calendar[date].append({"start": start_time, "end": end_time, "title": title})
+    for i, j in calendar.items():
+       j.sort(key=lambda x:x['start'])
     if save_calendar(calendar):
         return True
     else:
@@ -170,9 +172,14 @@ def command_show(calendar):
     b = []
     for i,j in sorted(calendar.items(), reverse=True):
         b.append('\n{} : '.format(i))
-        for v in sorted(j, key=lambda x:x['start']):
-            #b.append('\n'+' '*4+'start : {}\n'+' '*4+'end: {}\n'+' '*4+'title: {}\n'.format(v['start'], v['end'], v['title']))
-            b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}\n').format(v['start'], v['end'], v['title']))
+        j.sort(key=lambda x:x['start'])
+        l = len(j)
+        for v in j:
+            b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}').format(v['start'], v['end'], v['title']))
+            #b.append(('\n\tstart : {:02d}:00,\n\tend : {:02d}:00,\n\ttitle : {}').format(v['start'], v['end'], v['title']))
+            if l > 1:
+                b.append('\n')
+                l -= 1
     return ''.join(b)
 
 def command_delete(date, start_time, calendar):
@@ -228,13 +235,15 @@ def command_delete(date, start_time, calendar):
     """
 
     # YOUR CODE GOES HERE
-    data = {}
     # if not is_calendar_date(date) and not is_natural_number(start_time):
     #     return False
-    if data.get(date):
-        for i in data[date]:
+    if calendar.get(date):
+        for i in calendar[date]:
             if i['start'] == start_time:
-                return data[date].remove(i)
+                calendar[date].remove(i)
+                if calendar[date] == []:
+                    calendar.pop(date)
+                return True
         else:
             return "There is no event with start time of {} on date {} in the calendar".format(start_time, date)
     else:
@@ -300,12 +309,12 @@ def save_calendar(calendar):
     return: True if the calendar was saved.
     """
     # YOUR CODE GOES HERE
-    f = open("calendar.txt", 'w')
+    f = open("calendar.txt", 'w+')
     for i, j in sorted(calendar.items(), reverse=True):
         # st = ['{}-{} {}s'.format(v['start'], v['end'], v['title']) for v in j]
         # st.append('\n')
         #f.write(i+':'+'\t'.join(st))
-        f.writelines(command_show(calendar))
+        f.write(command_show(calendar))
     f.close()
     return True
 
@@ -324,13 +333,16 @@ def load_calendar():
     # YOUR CODE GOES HERE
     try:
         f = open("calendar.txt")
+        data = {}
+        for i in f:
+            data['value'] = i.readline()    
     except:
-        f = open("calendar.txt", "w+")
+        f = open("calendar.txt", "w")
         f.close()
         return {}
     else:
         f.close()
-        return {}
+        return data
 
 # -----------------------------------------------------------------------------
 # Functions dealing with parsing commands
