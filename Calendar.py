@@ -333,9 +333,7 @@ def load_calendar():
     # YOUR CODE GOES HERE
     try:
         f = open("calendar.txt")
-        data = {}
-        for i in f:
-            data['value'] = i.readline()    
+        data = {}    
     except:
         f = open("calendar.txt", "w")
         f.close()
