@@ -171,14 +171,14 @@ def command_show(calendar):
     """
     b = []
     for i,j in sorted(calendar.items(), reverse=True):
-        b.append('\n{} : '.format(i))
+        b.append('\\n{} : '.format(i))
         j.sort(key=lambda x:x['start'])
         l = len(j)
         for v in j:
             b.append(('\n'+' '*4+'start : {:02d}:00,\n'+' '*4+'end : {:02d}:00,\n'+' '*4+'title : {}').format(v['start'], v['end'], v['title']))
-            #b.append(('\n\tstart : {:02d}:00,\n\tend : {:02d}:00,\n\ttitle : {}').format(v['start'], v['end'], v['title']))
+            #b.append(('\\n\\tstart : {:02d}:00,\\n\\tend : {:02d}:00,\\n\\ttitle : {}').format(v['start'], v['end'], v['title']))
             if l > 1:
-                b.append('\n')
+                b.append('\\n')
                 l -= 1
     return ''.join(b)
 
@@ -311,10 +311,9 @@ def save_calendar(calendar):
     # YOUR CODE GOES HERE
     f = open("calendar.txt", 'w+')
     for i, j in sorted(calendar.items(), reverse=True):
-        # st = ['{}-{} {}s'.format(v['start'], v['end'], v['title']) for v in j]
-        # st.append('\n')
-        #f.write(i+':'+'\t'.join(st))
-        f.write(command_show(calendar))
+        st = ['{}-{} {}'.format(v['start'], v['end'], v['title']) for v in j]
+        st.append('\n')
+        f.write(i+':'+'\t'.join(st))
     f.close()
     return True
 
@@ -524,7 +523,6 @@ def parse_command(line):
     # HINT: You can first split, then join back the parts of
     # the final argument.
     # YOUR CODE GOES HERE
-    calendar = load_calendar()
     st = line.split()
     if len(st) == 0 or not is_command(st[0]):
         return ['help']
@@ -558,7 +556,6 @@ def parse_command(line):
             else:
                 return ['error', 'delete DATE START_TIME']
         elif st[0] == 'quit':
-            save_calendar(calendar)
             return ['quit']
         elif st[0] == 'show':
             if len(st) > 1:

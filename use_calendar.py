@@ -105,6 +105,7 @@ def user_interface():
     '''
     # Your code goes here
     data = calendar.load_calendar()
+    print("calendar loaded")
 
     while True:
         st = calendar.parse_command(input("command: "))
@@ -116,6 +117,7 @@ def user_interface():
                 print('added')
         elif st[0] == 'delete':
             a = calendar.command_delete(*st[1:], data)
+            print(a)
         elif st[0] == 'show':
             print(calendar.command_show(data))
         elif st[0] == 'error':
